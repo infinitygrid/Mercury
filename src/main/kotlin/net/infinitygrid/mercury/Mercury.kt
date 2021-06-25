@@ -3,10 +3,8 @@ package net.infinitygrid.mercury
 import com.google.gson.Gson
 import net.infinitygrid.mercury.chat.AsyncChatEvent
 import net.infinitygrid.mercury.chat.ConnectionListener
-import net.infinitygrid.mercury.crafting.InvisibleItemFrame
 import net.infinitygrid.mercury.discord.DiscordLivechat
 import net.infinitygrid.mercury.discord.MinecraftSysChatListener
-import net.infinitygrid.mercury.endportal.EndPortalRestriction
 import net.infinitygrid.mercury.pojo.MercuryConfig
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
@@ -31,10 +29,8 @@ class Mercury : MercuryPluginLoader() {
 
     override fun onPluginEnable() {
         registerListener(
-            AsyncChatEvent(), EndPortalRestriction(), MinecraftSysChatListener(discordLivechat),
-            ConnectionListener()
+            AsyncChatEvent(), MinecraftSysChatListener(discordLivechat), ConnectionListener()
         )
-        InvisibleItemFrame()
     }
 
     override fun onPluginDisable() {
