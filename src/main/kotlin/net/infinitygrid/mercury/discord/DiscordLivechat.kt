@@ -69,11 +69,11 @@ class DiscordLivechat(private val mercury: Mercury) {
         val challenge = rawMessage.contains("challenge")
         val embed = if (!challenge) {
             EmbedBuilder()
-                .setColor(0xFFFF00)
+                .setColor(0x54fb54)
                 .setAuthor("${player.displayName} has made the advancement $achName!", null, getAvatarURL(player))
         } else {
             EmbedBuilder()
-                .setColor(0xFFFF00)
+                .setColor(0xA800A8)
                 .setAuthor("${player.displayName} has completed the challenge $achName!", null, getAvatarURL(player))
         }
         channel.sendMessage(embed.build()).queue {
