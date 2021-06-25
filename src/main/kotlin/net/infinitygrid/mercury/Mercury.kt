@@ -2,6 +2,7 @@ package net.infinitygrid.mercury
 
 import com.google.gson.Gson
 import net.infinitygrid.mercury.chat.AsyncChatEvent
+import net.infinitygrid.mercury.chat.ConnectionListener
 import net.infinitygrid.mercury.crafting.InvisibleItemFrame
 import net.infinitygrid.mercury.discord.DiscordLivechat
 import net.infinitygrid.mercury.discord.MinecraftSysChatListener
@@ -12,7 +13,7 @@ import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
-class Mercury : JavaPlugin() {
+class Mercury : MercuryPluginLoader() {
 
     companion object {
         lateinit var instance: Mercury
@@ -22,25 +23,22 @@ class Mercury : JavaPlugin() {
     private val pluginManager = Bukkit.getPluginManager()
     lateinit var config: MercuryConfig
 
-    override fun onLoad() {
+    override fun onPluginLoad() {
         config = Gson().fromJson(File("${dataFolder.absolutePath}/config.json").readText(), MercuryConfig::class.java)
         instance = this
         discordLivechat = DiscordLivechat(instance)
     }
 
-    override fun onEnable() {
-        registerListener(AsyncChatEvent(), EndPortalRestriction(), MinecraftSysChatListener(discordLivechat))
+    override fun onPluginEnable() {
+        registerListener(
+            AsyncChatEvent(), EndPortalRestriction(), MinecraftSysChatListener(discordLivechat),
+            ConnectionListener()
+        )
         InvisibleItemFrame()
     }
 
-    override fun onDisable() {
+    override fun onPluginDisable() {
         discordLivechat.shutdown()
-    }
-
-    private fun registerListener(vararg listeners: Listener) {
-        listeners.forEach {
-            pluginManager.registerEvents(it, this)
-        }
     }
 
 }
