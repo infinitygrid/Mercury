@@ -1,5 +1,6 @@
 package net.infinitygrid.mercury.chat
 
+import net.infinitygrid.mercury.Mercury
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -13,6 +14,8 @@ class ConnectionListener : Listener {
     @EventHandler
     private fun onJoin(e: PlayerJoinEvent) {
         val player = e.player
+        // player.playerListName(Component.text(player.displayName).color(TextColor.color(0xFF0000)))
+        Mercury.instance.prefixScoreboard.addPlayer(player)
         val textComponent = Component.text("→ ")
             .append(player.displayName())
                 .color(TextColor.color(0x21cf9a))

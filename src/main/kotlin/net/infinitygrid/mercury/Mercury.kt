@@ -18,8 +18,8 @@ class Mercury : MercuryPluginLoader() {
         lateinit var discordLivechat: DiscordLivechat
     }
 
-    private val pluginManager = Bukkit.getPluginManager()
     lateinit var config: MercuryConfig
+    lateinit var prefixScoreboard: PrefixScoreboard
 
     override fun onPluginLoad() {
         config = Gson().fromJson(File("${dataFolder.absolutePath}/config.json").readText(), MercuryConfig::class.java)
@@ -28,6 +28,7 @@ class Mercury : MercuryPluginLoader() {
     }
 
     override fun onPluginEnable() {
+        prefixScoreboard = PrefixScoreboard()
         registerListener(
             AsyncChatEvent(), MinecraftSysChatListener(discordLivechat), ConnectionListener()
         )
