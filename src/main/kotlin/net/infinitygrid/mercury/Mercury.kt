@@ -11,27 +11,26 @@ class Mercury : MercuryPluginLoader() {
 
     companion object {
         lateinit var instance: Mercury
-        lateinit var discordLivechat: DiscordLivechat
     }
 
     lateinit var discordConfig: GsonDiscordLivechat
     lateinit var prefixScoreboard: PrefixScoreboard
+    var discordLivechat: DiscordLivechat? = null
 
     override fun onPluginLoad() {
         instance = this
         discordConfig = GsonConfigManager(this, "discordLivechat.json", GsonDiscordLivechat::class.java).read()
-        discordLivechat = DiscordLivechat(instance)
+        if (discordConfig.enabled) DiscordLivechat(instance)
     }
 
     override fun onPluginEnable() {
         prefixScoreboard = PrefixScoreboard()
-        registerListener(
-            AsyncChatEvent(), MinecraftSysChatListener(discordLivechat), ConnectionListener()
-        )
+        discordLivechat?.let { MinecraftSysChatListener(it) }
+        registerListener(AsyncChatEvent(), ConnectionListener())
     }
 
     override fun onPluginDisable() {
-        discordLivechat.shutdown()
+        discordLivechat?.shutdown()
     }
 
 }

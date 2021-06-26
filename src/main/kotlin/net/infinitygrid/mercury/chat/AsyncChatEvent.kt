@@ -29,7 +29,7 @@ class AsyncChatEvent : Listener {
             .append(nameComponent)
             .append(Component.text("\n "))
             .append(miniMessage.parse((rawMessage).content()))
-        Mercury.discordLivechat.sendMessage(player, rawMessage.content())
+        Mercury.instance.discordLivechat?.sendMessage(player, rawMessage.content())
         event.renderer { _, _, _, _ ->
             component.build()
         }
