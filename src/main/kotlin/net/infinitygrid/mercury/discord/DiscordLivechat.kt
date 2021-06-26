@@ -48,10 +48,6 @@ class DiscordLivechat(private val mercury: Mercury) {
         return "https://crafatar.com/renders/head/${player.uniqueId}?overlay&scale=5"
     }
 
-    private fun getBodyURL(player: Player): String {
-        return "https://crafatar.com/renders/body/${player.uniqueId}?overlay&scale=5"
-    }
-
     fun sendDeathMessage(event: PlayerDeathEvent) {
         val player = event.entity
         val channel = jda.getTextChannelById(mercury.discordConfig.channelId)!!
@@ -85,7 +81,6 @@ class DiscordLivechat(private val mercury: Mercury) {
     fun receiveMessage(message: Message) {
         val member = message.member!!
         val displayName = member.nickname ?: member.effectiveName
-        val effectiveName = member.effectiveName
         val roleColor = member.color!!
         Bukkit.broadcast(Component.text()
             .color(TextColor.color(AsyncChatEvent.DEFAULT_COLOR))
