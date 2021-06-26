@@ -14,7 +14,6 @@ class ConnectionListener : Listener {
     @EventHandler
     private fun onJoin(e: PlayerJoinEvent) {
         val player = e.player
-        // player.playerListName(Component.text(player.displayName).color(TextColor.color(0xFF0000)))
         Mercury.instance.prefixScoreboard.addPlayer(player)
         val textComponent = Component.text("→ ")
             .append(player.displayName())
