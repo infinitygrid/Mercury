@@ -2,7 +2,7 @@ package net.infinitygrid.mercury.chat
 
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.infinitygrid.mercury.Mercury
-import net.infinitygrid.mercury.groups.PermissionGroup
+import net.infinitygrid.mercury.getPermissionGroup
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.TextColor
@@ -21,8 +21,8 @@ class AsyncChatEvent : Listener {
     @EventHandler
     private fun on(event: AsyncChatEvent) {
         val player = event.player
-        val permGroup = PermissionGroup.getByPlayer(player)
-        val nameComponent = miniMessage.parse("<bold>${player.displayName} ").color(TextColor.color(permGroup.color))
+        val permGroup = player.getPermissionGroup()
+        val nameComponent = miniMessage.parse("<bold>${player.displayName} ").color(TextColor.color(permGroup.hexAsInteger))
         val rawMessage = event.message() as TextComponent
         val component = Component.text()
                 .color(TextColor.color(DEFAULT_COLOR))
