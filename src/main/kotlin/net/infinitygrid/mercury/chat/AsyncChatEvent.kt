@@ -23,10 +23,12 @@ class AsyncChatEvent : Listener {
     private fun on(event: AsyncChatEvent) {
         val player = event.player
         val permGroup = player.getPermissionGroup()
-        val nameComponent = miniMessage.parse("<bold>${player.getStringedDisplayName()} ").color(TextColor.color(permGroup.hexAsInteger))
+        val nameComponent = miniMessage
+            .parse("<bold>${player.getStringedDisplayName()} ")
+            .color(TextColor.color(permGroup.hexAsInteger))
         val rawMessage = event.message() as TextComponent
         val component = Component.text()
-                .color(TextColor.color(DEFAULT_COLOR))
+            .color(TextColor.color(DEFAULT_COLOR))
             .append(nameComponent)
             .append(Component.text("\n "))
             .append(miniMessage.parse((rawMessage).content()))

@@ -19,9 +19,8 @@ class ConnectionListener : Listener {
             .append(player.displayName())
                 .color(TextColor.color(0x21cf9a))
                 .decorate(TextDecoration.BOLD)
-            .append(
-                Component.text(" joined").decoration(TextDecoration.BOLD, false)
-            )
+            .append(Component.text(" joined")
+                .decoration(TextDecoration.BOLD, false))
         e.joinMessage(textComponent)
     }
 
@@ -32,9 +31,8 @@ class ConnectionListener : Listener {
             .append(player.displayName())
                 .color(TextColor.color(0xe0266b))
                 .decorate(TextDecoration.BOLD)
-            .append(
-                Component.text(" left").decoration(TextDecoration.BOLD, false)
-            )
+            .append(Component.text(" left")
+                .decoration(TextDecoration.BOLD, false))
         e.quitMessage(textComponent)
     }
 
