@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.infinitygrid.mercury.Mercury
 import net.infinitygrid.mercury.chat.AsyncChatEvent
+import net.infinitygrid.mercury.getStringedDisplayName
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.TranslatableComponent
@@ -70,11 +71,11 @@ class DiscordLivechat(private val mercury: Mercury) {
         val embed = if (!challenge) {
             EmbedBuilder()
                 .setColor(0x54fb54)
-                .setAuthor("${player.displayName} has made the advancement $achName!", null, getAvatarURL(player))
+                .setAuthor("${player.getStringedDisplayName()} has made the advancement $achName!", null, getAvatarURL(player))
         } else {
             EmbedBuilder()
                 .setColor(0xA800A8)
-                .setAuthor("${player.displayName} has completed the challenge $achName!", null, getAvatarURL(player))
+                .setAuthor("${player.getStringedDisplayName()} has completed the challenge $achName!", null, getAvatarURL(player))
         }
         channel.sendMessage(embed.build()).queue {
             it.addReaction("U+1F389").queue()

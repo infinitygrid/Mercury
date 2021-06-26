@@ -33,10 +33,10 @@ class PrefixScoreboard(private val permissionGroupCollection: GsonPermissionGrou
             if (permissionGroup.permissionNode != null) {
                 println(permissionGroup.permissionNode)
                 if (player.hasPermission(permissionGroup.permissionNode)) {
-                    scoreboard.getTeam("$i${permissionGroup.scoreboardTeamName}")!!.addEntry(player.displayName)
+                    scoreboard.getTeam("$i${permissionGroup.scoreboardTeamName}")!!.addEntry(player.getStringedDisplayName())
                 }
             } else {
-                scoreboard.getTeam("$i${permissionGroup.scoreboardTeamName}")!!.addEntry(player.displayName)
+                scoreboard.getTeam("$i${permissionGroup.scoreboardTeamName}")!!.addEntry(player.getStringedDisplayName())
             }
         }
         player.scoreboard = scoreboard
