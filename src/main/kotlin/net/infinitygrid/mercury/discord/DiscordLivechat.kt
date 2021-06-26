@@ -22,12 +22,12 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent
 
 class DiscordLivechat(private val mercury: Mercury) {
 
-    private val webhook = WebhookClient.withUrl(mercury.config.webhookUrl)
-    private var channelListener = DiscordChannelListener(this, mercury.config.channelId)
+    private val webhook = WebhookClient.withUrl(mercury.discordConfig.webhookUrl)
+    private var channelListener = DiscordChannelListener(this, mercury.discordConfig.channelId)
     private var jda = connect()
 
     private fun connect(): JDA {
-        return JDABuilder.createLight(mercury.config.botToken,
+        return JDABuilder.createLight(mercury.discordConfig.botToken,
             GatewayIntent.GUILD_MESSAGES,
             GatewayIntent.GUILD_MESSAGE_TYPING,
             GatewayIntent.GUILD_MESSAGE_REACTIONS
@@ -53,7 +53,7 @@ class DiscordLivechat(private val mercury: Mercury) {
 
     fun sendDeathMessage(event: PlayerDeathEvent) {
         val player = event.entity
-        val channel = jda.getTextChannelById(mercury.config.channelId)!!
+        val channel = jda.getTextChannelById(mercury.discordConfig.channelId)!!
         val embed = EmbedBuilder()
             .setColor(0xFF0000)
             .setAuthor(Bukkit.getUnsafe().legacyComponentSerializer().serialize(event.deathMessage()!!), null, getAvatarURL(player))
@@ -63,7 +63,7 @@ class DiscordLivechat(private val mercury: Mercury) {
     fun sendAchievementMessage(event: PlayerAdvancementDoneEvent) {
         println((event.message() as TranslatableComponent).args()[0])
         val player = event.player
-        val channel = jda.getTextChannelById(mercury.config.channelId)!!
+        val channel = jda.getTextChannelById(mercury.discordConfig.channelId)!!
         val rawMessage = Bukkit.getUnsafe().legacyComponentSerializer().serialize(event.message()!!)
         val achName = rawMessage.substring(rawMessage.indexOf('[') + 1, rawMessage.length - 1)
         val challenge = rawMessage.contains("challenge")

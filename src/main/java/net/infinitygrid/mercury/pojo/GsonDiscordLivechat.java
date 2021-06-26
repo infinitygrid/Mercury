@@ -1,6 +1,6 @@
 package net.infinitygrid.mercury.pojo;
 
-public class MercuryConfig {
+public class GsonDiscordLivechat {
 
     public String botToken;
     public String webhookUrl;
