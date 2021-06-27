@@ -9,20 +9,18 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-class ConnectionListener : Listener {
+internal class ConnectionListener : Listener {
 
     @EventHandler
     private fun onJoin(e: PlayerJoinEvent) {
         val player = e.player
-        // player.playerListName(Component.text(player.displayName).color(TextColor.color(0xFF0000)))
         Mercury.instance.prefixScoreboard.addPlayer(player)
         val textComponent = Component.text("→ ")
             .append(player.displayName())
                 .color(TextColor.color(0x21cf9a))
                 .decorate(TextDecoration.BOLD)
-            .append(
-                Component.text(" joined").decoration(TextDecoration.BOLD, false)
-            )
+            .append(Component.text(" joined")
+                .decoration(TextDecoration.BOLD, false))
         e.joinMessage(textComponent)
     }
 
@@ -33,9 +31,8 @@ class ConnectionListener : Listener {
             .append(player.displayName())
                 .color(TextColor.color(0xe0266b))
                 .decorate(TextDecoration.BOLD)
-            .append(
-                Component.text(" left").decoration(TextDecoration.BOLD, false)
-            )
+            .append(Component.text(" left")
+                .decoration(TextDecoration.BOLD, false))
         e.quitMessage(textComponent)
     }
 
