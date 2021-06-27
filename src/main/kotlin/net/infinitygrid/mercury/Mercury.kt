@@ -4,7 +4,6 @@ import net.infinitygrid.mercury.chat.AsyncChatEvent
 import net.infinitygrid.mercury.chat.ConnectionListener
 import net.infinitygrid.mercury.config.GsonConfigManager
 import net.infinitygrid.mercury.discord.DiscordLivechatComponent
-import net.infinitygrid.mercury.discord.MinecraftSysChatListener
 import net.infinitygrid.mercury.pojo.GsonDiscordLivechat
 import net.infinitygrid.mercury.pojo.GsonPermissionGroupCollection
 
@@ -23,12 +22,15 @@ internal class Mercury : MercuryPluginLoader() {
         instance = this
         discordConfig = GsonConfigManager(this, "discordLivechat.json", GsonDiscordLivechat::class.java).read()
         permissionGroupConfig = GsonConfigManager(this, "permissionGroups.json", GsonPermissionGroupCollection::class.java).read()
-        if (discordConfig.enabled) registerComponent(DiscordLivechatComponent(this))
+
     }
 
     override fun onPluginEnable() {
+        if (discordConfig.enabled) {
+            discordLivechat = DiscordLivechatComponent(this)
+            registerComponent(discordLivechat!!)
+        }
         prefixScoreboard = PrefixScoreboard(permissionGroupConfig)
-        discordLivechat?.let { MinecraftSysChatListener(it) }
         registerListener(AsyncChatEvent(), ConnectionListener())
     }
 

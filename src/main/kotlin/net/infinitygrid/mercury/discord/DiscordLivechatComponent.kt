@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.infinitygrid.mercury.Mercury
 import net.infinitygrid.mercury.MercuryComponent
-import net.infinitygrid.mercury.MercuryPluginLoader
 import net.infinitygrid.mercury.chat.AsyncChatEvent
 import net.infinitygrid.mercury.getStringedDisplayName
 import net.kyori.adventure.text.Component
@@ -28,6 +27,10 @@ internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryC
     private val webhook = WebhookClient.withUrl(mercury.discordConfig.webhookUrl)
     private var channelListener = DiscordChannelListener(this, mercury.discordConfig.channelId)
     private var jda = connect()
+
+    override fun onEnable() {
+        registerListener(MinecraftSysChatListener(this))
+    }
 
     override fun onDisable() {
         jda.removeEventListener(channelListener)
