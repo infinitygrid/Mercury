@@ -10,7 +10,7 @@ public abstract class MercuryComponent(private val plugin: MercuryPluginLoader) 
     private val listeners = mutableSetOf<Listener>()
 
     internal fun initiate() {
-        onModuleEnable()
+        onEnable()
     }
 
     public fun unregisterListeners() {
@@ -19,8 +19,8 @@ public abstract class MercuryComponent(private val plugin: MercuryPluginLoader) 
         }
     }
 
-    public open fun onModuleEnable() {}
-    public open fun onModuleDisable() {}
+    public open fun onEnable() {}
+    public open fun onDisable() {}
 
     public fun registerListener(vararg listeners: Listener) {
         this.listeners.addAll(listeners)
