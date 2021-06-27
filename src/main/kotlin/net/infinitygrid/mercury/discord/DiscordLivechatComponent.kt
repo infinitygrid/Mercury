@@ -114,13 +114,14 @@ internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryC
         val member = message.member!!
         val displayName = member.nickname ?: member.effectiveName
         val roleColor = member.color!!
+        val messageStr = message.contentDisplay.replace(Regex("§[\\da-fklmnorx]", RegexOption.IGNORE_CASE), "")
         Bukkit.broadcast(
             Component.text()
             .color(TextColor.color(AsyncChatEvent.DEFAULT_COLOR))
             .append(Component.text("$displayName ").decorate(TextDecoration.BOLD).color(TextColor.color(roleColor.rgb)))
             .append(Component.text("⇄ Discord").color(TextColor.color(0x454545)))
             .append(Component.text("\n "))
-            .append(AsyncChatEvent.miniMessage.parse(message.contentDisplay)).build())
+            .append(AsyncChatEvent.miniMessage.parse(messageStr)).build())
     }
 
 }
