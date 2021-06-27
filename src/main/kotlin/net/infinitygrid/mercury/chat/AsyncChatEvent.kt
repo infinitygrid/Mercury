@@ -12,7 +12,7 @@ import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-class AsyncChatEvent : Listener {
+internal class AsyncChatEvent : Listener {
 
     companion object {
         val miniMessage = MiniMessage.withMarkdownFlavor(DiscordFlavor.get())

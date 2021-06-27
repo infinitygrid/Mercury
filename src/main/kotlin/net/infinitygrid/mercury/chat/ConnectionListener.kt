@@ -9,7 +9,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-class ConnectionListener : Listener {
+internal class ConnectionListener : Listener {
 
     @EventHandler
     private fun onJoin(e: PlayerJoinEvent) {

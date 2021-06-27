@@ -4,10 +4,12 @@ import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+import java.util.logging.Level
 
-abstract class MercuryPluginLoader : JavaPlugin() {
+public abstract class MercuryPluginLoader public constructor() : JavaPlugin() {
 
     private val pluginManager = Bukkit.getPluginManager()
+    private val initUnixTimeMs = System.currentTimeMillis()
 
     final override fun onLoad() {
         onPluginLoad()
@@ -15,6 +17,7 @@ abstract class MercuryPluginLoader : JavaPlugin() {
 
     final override fun onEnable() {
         onPluginEnable()
+        logger.log(Level.INFO, "Plugin has been enabled! (Took ${System.currentTimeMillis() - initUnixTimeMs}ms!)")
         object : BukkitRunnable() {
             override fun run() {
                 afterPluginEnable()
@@ -24,14 +27,15 @@ abstract class MercuryPluginLoader : JavaPlugin() {
 
     final override fun onDisable() {
         onPluginDisable()
+        logger.log(Level.INFO, "Plugin has been disabled.")
     }
 
-    open fun onPluginLoad() {}
-    open fun onPluginEnable() {}
-    open fun afterPluginEnable() {}
-    open fun onPluginDisable() {}
+    public open fun onPluginLoad() {}
+    public open fun onPluginEnable() {}
+    public open fun afterPluginEnable() {}
+    public open fun onPluginDisable() {}
 
-    fun registerListener(vararg listeners: Listener) {
+    public fun registerListener(vararg listeners: Listener) {
         listeners.forEach {
             pluginManager.registerEvents(it, this)
         }

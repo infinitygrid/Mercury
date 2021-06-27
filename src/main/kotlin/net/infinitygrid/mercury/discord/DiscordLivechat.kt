@@ -21,7 +21,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 
-class DiscordLivechat(private val mercury: Mercury) {
+internal class DiscordLivechat(private val mercury: Mercury) {
 
     private val webhook = WebhookClient.withUrl(mercury.discordConfig.webhookUrl)
     private var channelListener = DiscordChannelListener(this, mercury.discordConfig.channelId)

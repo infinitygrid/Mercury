@@ -8,7 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-class PrefixScoreboard(private val permissionGroupCollection: GsonPermissionGroupCollection) {
+internal class PrefixScoreboard(private val permissionGroupCollection: GsonPermissionGroupCollection) {
 
     private val scoreboard = Bukkit.getScoreboardManager().mainScoreboard
 

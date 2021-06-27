@@ -8,7 +8,7 @@ import net.infinitygrid.mercury.discord.MinecraftSysChatListener
 import net.infinitygrid.mercury.pojo.GsonDiscordLivechat
 import net.infinitygrid.mercury.pojo.GsonPermissionGroupCollection
 
-class Mercury : MercuryPluginLoader() {
+internal class Mercury : MercuryPluginLoader() {
 
     companion object {
         lateinit var instance: Mercury

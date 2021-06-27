@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
-class GsonConfigManager<T>(plugin: JavaPlugin, fileName: String, private var classOfT: Class<T>) {
+public class GsonConfigManager<T>(plugin: JavaPlugin, fileName: String, private var classOfT: Class<T>) {
 
-    companion object {
+    private companion object {
         val gson: Gson = GsonBuilder()
             .setLenient()
             .setPrettyPrinting()
@@ -17,7 +17,7 @@ class GsonConfigManager<T>(plugin: JavaPlugin, fileName: String, private var cla
 
     private val configFile = File("./${plugin.dataFolder}/$fileName")
 
-    fun read(): T {
+    public fun read(): T {
         if (!configFile.isFile) {
             configFile.parentFile.parentFile.mkdirs()
             configFile.createNewFile()
@@ -26,7 +26,7 @@ class GsonConfigManager<T>(plugin: JavaPlugin, fileName: String, private var cla
         return gson.fromJson(fileContent, classOfT)
     }
 
-    fun write(clazz: T) {
+    public fun write(clazz: T) {
         val newFileContent = gson.toJson(clazz)
         configFile.writeText(newFileContent)
     }
