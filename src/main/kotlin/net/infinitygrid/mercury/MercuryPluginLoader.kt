@@ -10,6 +10,7 @@ public abstract class MercuryPluginLoader public constructor() : JavaPlugin() {
 
     private val pluginManager = Bukkit.getPluginManager()
     private val initUnixTimeMs = System.currentTimeMillis()
+    private val componentSet = mutableSetOf<MercuryComponent>()
 
     final override fun onLoad() {
         onPluginLoad()
@@ -38,6 +39,13 @@ public abstract class MercuryPluginLoader public constructor() : JavaPlugin() {
     public fun registerListener(vararg listeners: Listener) {
         listeners.forEach {
             pluginManager.registerEvents(it, this)
+        }
+    }
+
+    public fun registerComponent(vararg components: MercuryComponent) {
+        componentSet.addAll(components)
+        components.forEach { component ->
+            component.initiate()
         }
     }
 
