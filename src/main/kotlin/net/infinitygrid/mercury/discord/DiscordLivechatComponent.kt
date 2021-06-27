@@ -23,6 +23,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import java.util.concurrent.TimeUnit
 
 internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryComponent(mercury) {
 
@@ -118,6 +119,17 @@ internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryC
         val displayName = member.nickname ?: member.effectiveName
         val roleColor = member.color!!
         val messageStr = message.contentDisplay.replace(Regex("§[\\da-fklmnorx]", RegexOption.IGNORE_CASE), "")
+        if (messageStr.length > 256) {
+            message.delete().queue {
+                message.channel.sendMessage(
+                    "${member.asMention} Your message could not be sent as it exceeds Minecraft's chat limit.\n\n" +
+                    "**Message:**\n${messageStr.substring(0, 256)} [...and ${messageStr.substring(256).length} more characters]"
+                ).queue {
+                    it.delete().queueAfter(15, TimeUnit.SECONDS)
+                }
+            }
+            return
+        }
         Bukkit.broadcast(
             Component.text()
             .color(TextColor.color(AsyncChatEvent.DEFAULT_COLOR))
