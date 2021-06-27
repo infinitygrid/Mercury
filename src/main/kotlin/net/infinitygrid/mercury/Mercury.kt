@@ -22,7 +22,6 @@ internal class Mercury : MercuryPluginLoader() {
         instance = this
         discordConfig = GsonConfigManager(this, "discordLivechat.json", GsonDiscordLivechat::class.java).read()
         permissionGroupConfig = GsonConfigManager(this, "permissionGroups.json", GsonPermissionGroupCollection::class.java).read()
-
     }
 
     override fun onPluginEnable() {

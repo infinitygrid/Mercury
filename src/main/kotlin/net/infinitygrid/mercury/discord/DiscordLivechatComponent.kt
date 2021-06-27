@@ -21,6 +21,8 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 
 internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryComponent(mercury) {
 
@@ -88,6 +90,24 @@ internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryC
         channel.sendMessage(embed.build()).queue {
             it.addReaction("U+1F389").queue()
         }
+    }
+
+    fun sendJoinMessage(event: PlayerJoinEvent) {
+        val player = event.player
+        val embed = EmbedBuilder()
+            .setAuthor("\uD83E\uDC46 ${player.getStringedDisplayName()} joined", null, getAvatarURL(player))
+            .setColor(0x27ab83)
+        val channel = jda.getTextChannelById(mercury.discordConfig.channelId)!!
+        channel.sendMessage(embed.build()).queue()
+    }
+
+    fun sendQuitMessage(event: PlayerQuitEvent) {
+        val player = event.player
+        val embed = EmbedBuilder()
+            .setAuthor("\uD83E\uDC44 ${player.getStringedDisplayName()} quit", null, getAvatarURL(player))
+            .setColor(0xe0266b)
+        val channel = jda.getTextChannelById(mercury.discordConfig.channelId)!!
+        channel.sendMessage(embed.build()).queue()
     }
 
     fun receiveMessage(message: Message) {
