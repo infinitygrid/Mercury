@@ -5,7 +5,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 
-internal class MinecraftSysChatListener(private val discordLivechat: DiscordLivechat) : Listener {
+internal class MinecraftSysChatListener(private val discordLivechat: DiscordLivechatComponent) : Listener {
 
     @EventHandler
     private fun on(e: PlayerDeathEvent) {

@@ -29,4 +29,9 @@ public abstract class MercuryComponent(private val plugin: MercuryPluginLoader) 
         }
     }
 
+    public fun shutdown() {
+        onDisable()
+        unregisterListeners()
+    }
+
 }

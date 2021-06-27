@@ -27,6 +27,9 @@ public abstract class MercuryPluginLoader public constructor() : JavaPlugin() {
     }
 
     final override fun onDisable() {
+        componentSet.forEach { component ->
+            component.shutdown()
+        }
         onPluginDisable()
         logger.log(Level.INFO, "Plugin has been disabled.")
     }

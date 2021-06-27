@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.infinitygrid.mercury.Mercury
+import net.infinitygrid.mercury.MercuryComponent
+import net.infinitygrid.mercury.MercuryPluginLoader
 import net.infinitygrid.mercury.chat.AsyncChatEvent
 import net.infinitygrid.mercury.getStringedDisplayName
 import net.kyori.adventure.text.Component
@@ -21,11 +23,17 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 
-internal class DiscordLivechat(private val mercury: Mercury) {
+internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryComponent(mercury) {
 
     private val webhook = WebhookClient.withUrl(mercury.discordConfig.webhookUrl)
     private var channelListener = DiscordChannelListener(this, mercury.discordConfig.channelId)
     private var jda = connect()
+
+    override fun onDisable() {
+        jda.removeEventListener(channelListener)
+        jda.shutdownNow()
+        webhook.close()
+    }
 
     private fun connect(): JDA {
         return JDABuilder.createLight(mercury.discordConfig.botToken,
@@ -36,7 +44,8 @@ internal class DiscordLivechat(private val mercury: Mercury) {
     }
 
     fun sendMessage(player: Player, message: String) {
-        webhook.send(WebhookMessageBuilder()
+        webhook.send(
+            WebhookMessageBuilder()
             .setUsername((player.displayName() as TextComponent).content())
             .setAvatarUrl(getAvatarURL(player))
             .setAllowedMentions(AllowedMentions.none())
@@ -82,18 +91,13 @@ internal class DiscordLivechat(private val mercury: Mercury) {
         val member = message.member!!
         val displayName = member.nickname ?: member.effectiveName
         val roleColor = member.color!!
-        Bukkit.broadcast(Component.text()
+        Bukkit.broadcast(
+            Component.text()
             .color(TextColor.color(AsyncChatEvent.DEFAULT_COLOR))
             .append(Component.text("$displayName ").decorate(TextDecoration.BOLD).color(TextColor.color(roleColor.rgb)))
             .append(Component.text("⇄ Discord").color(TextColor.color(0x454545)))
             .append(Component.text("\n "))
             .append(AsyncChatEvent.miniMessage.parse(message.contentDisplay)).build())
-    }
-
-    fun shutdown() {
-        jda.removeEventListener(channelListener)
-        jda.shutdownNow()
-        webhook.close()
     }
 
 }
