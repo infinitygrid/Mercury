@@ -65,9 +65,12 @@ internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryC
     fun sendDeathMessage(event: PlayerDeathEvent) {
         val player = event.entity
         val channel = jda.getTextChannelById(mercury.discordConfig.channelId)!!
+        var message = Bukkit.getUnsafe().legacyComponentSerializer().serialize(event.deathMessage()!!)
+        message = message.replace(Regex("§[\\da-fklmnorx]", RegexOption.IGNORE_CASE), "")
+        message = message.substring(message.indexOf(player.getStringedDisplayName()))
         val embed = EmbedBuilder()
             .setColor(0xFF0000)
-            .setAuthor(Bukkit.getUnsafe().legacyComponentSerializer().serialize(event.deathMessage()!!), null, getAvatarURL(player))
+            .setAuthor(message, null, getAvatarURL(player))
         channel.sendMessage(embed.build()).queue()
     }
 
