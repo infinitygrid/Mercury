@@ -76,9 +76,9 @@ internal class DiscordLivechatComponent(private val mercury: Mercury) : MercuryC
     }
 
     fun sendAchievementMessage(event: PlayerAdvancementDoneEvent) {
-        println((event.message() as TranslatableComponent).args()[0])
         val player = event.player
         val channel = jda.getTextChannelById(mercury.discordConfig.channelId)!!
+        if (event.message() == null) return
         val rawMessage = Bukkit.getUnsafe().legacyComponentSerializer().serialize(event.message()!!)
         val achName = rawMessage.substring(rawMessage.indexOf('[') + 1, rawMessage.length - 1)
         val challenge = rawMessage.contains("challenge")
