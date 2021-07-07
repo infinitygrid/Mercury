@@ -1,7 +1,13 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `maven-publish`
     java
     kotlin("jvm") version "1.5.10"
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "16"
 }
 
 group = "net.infinitygrid"
