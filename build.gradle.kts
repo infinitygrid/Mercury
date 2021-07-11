@@ -7,10 +7,6 @@ plugins {
 group = "net.infinitygrid"
 version = "1.0-SNAPSHOT"
 
-kotlin {
-    explicitApi()
-}
-
 repositories {
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
