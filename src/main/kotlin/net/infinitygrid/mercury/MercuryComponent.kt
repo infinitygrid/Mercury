@@ -9,7 +9,7 @@ public abstract class MercuryComponent(private val plugin: MercuryPluginLoader) 
     private val pluginManager = Bukkit.getPluginManager()
     private val listeners = mutableSetOf<Listener>()
 
-    internal fun initiate() {
+    public fun initiate() {
         onEnable()
     }
 

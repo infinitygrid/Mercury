@@ -53,7 +53,7 @@ public class MercuryPluginLoader extends JavaPlugin {
 
     public void registerComponent(MercuryComponent... components) {
         componentSet.addAll(Arrays.asList(components));
-        Arrays.stream(components).forEach(MercuryComponent::initiate$Mercury_main);
+        Arrays.stream(components).forEach(MercuryComponent::initiate);
     }
 
 }
