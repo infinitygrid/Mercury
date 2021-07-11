@@ -12,7 +12,7 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://m2.dv8tion.net/releases")
     maven("https://repo.pl3x.net/")
-    jcenter()
+    maven("https://libraries.minecraft.net")
 }
 
 dependencies {
@@ -24,6 +24,7 @@ dependencies {
     implementation("net.dv8tion:JDA:4.2.1_276")
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("club.minnced:discord-webhooks:0.5.7")
+    compileOnly("com.mojang:brigadier:1.0.17")
 }
 
 tasks.getByName<Test>("test") {
