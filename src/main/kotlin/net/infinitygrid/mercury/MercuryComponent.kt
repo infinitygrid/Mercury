@@ -34,9 +34,7 @@ abstract class MercuryComponent(private val plugin: MercuryPluginLoader) {
 
     fun registerCommand(vararg mercuryCommands: MercuryCommand) {
         this.commands.addAll(mercuryCommands)
-        mercuryCommands.forEach { mercuryCommand ->
-            Bukkit.getCommandMap().register(mercuryCommand.name, mercuryCommand)
-        }
+        plugin.registerCommand(*mercuryCommands)
     }
 
     fun shutdown() {

@@ -3,8 +3,9 @@ package net.infinitygrid.mercury.command
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
+import java.io.InputStream
 
-abstract class MercuryCommand(name: String) : BukkitCommand(name) {
+abstract class MercuryCommand(name: String, val commodoreFileInStream: InputStream? = null) : BukkitCommand(name) {
 
     var requiresAnyPermission: MutableSet<String> = mutableSetOf()
     val requiredPermissions: MutableSet<String> = mutableSetOf()

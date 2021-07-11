@@ -25,6 +25,7 @@ dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("club.minnced:discord-webhooks:0.5.7")
     compileOnly("com.mojang:brigadier:1.0.17")
+    compileOnly("me.lucko:commodore:1.9")
 }
 
 tasks.getByName<Test>("test") {
