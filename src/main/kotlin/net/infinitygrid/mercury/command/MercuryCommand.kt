@@ -6,11 +6,36 @@ import org.bukkit.command.defaults.BukkitCommand
 
 abstract class MercuryCommand(name: String) : BukkitCommand(name) {
 
-    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
-        TODO("Not yet implemented")
+    var requireAnyPermission: MutableList<String>? = null
+    val requirePermissions: MutableList<String>? = null
+
+    final override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
+        requireAnyPermission?.let {
+            if (!hasAnyPermission(sender, it)) return true
+        }
+        requirePermissions?.let {
+            if (!hasEveryPermission(sender, it)) return true
+        }
+        return executeCommand(sender, commandLabel, args)
     }
 
-    override fun tabComplete(
+    abstract fun executeCommand(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean
+
+    private fun hasEveryPermission(commandSender: CommandSender, nodeList: List<String>): Boolean {
+        nodeList.forEach { permissionNode ->
+            if (!commandSender.hasPermission(permissionNode)) return false
+        }
+        return true
+    }
+
+    private fun hasAnyPermission(commandSender: CommandSender, nodeList: List<String>): Boolean {
+        nodeList.forEach { permissionNode ->
+            if (commandSender.hasPermission(permissionNode)) return true
+        }
+        return false
+    }
+
+    final override fun tabComplete(
         sender: CommandSender,
         alias: String,
         args: Array<out String>,

@@ -1,6 +1,8 @@
 package net.infinitygrid.mercury;
 
+import net.infinitygrid.mercury.command.MercuryCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,6 +16,7 @@ import java.util.logging.Level;
 public class MercuryPluginLoader extends JavaPlugin {
 
     private final PluginManager pluginManager = Bukkit.getPluginManager();
+    private final CommandMap commandMap = Bukkit.getCommandMap();
     private final long initUnixTimeMs = System.currentTimeMillis();
     private final Set<MercuryComponent> componentSet = new HashSet<>();
 
@@ -49,6 +52,12 @@ public class MercuryPluginLoader extends JavaPlugin {
 
     public void registerListener(Listener... listeners) {
         Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, this));
+    }
+
+    public void registerCommand(MercuryCommand... mercuryCommands) {
+        Arrays.stream(mercuryCommands).forEach(mercuryCommand -> {
+            commandMap.register(mercuryCommand.getName(), mercuryCommand);
+        });
     }
 
     public void registerComponent(MercuryComponent... components) {
