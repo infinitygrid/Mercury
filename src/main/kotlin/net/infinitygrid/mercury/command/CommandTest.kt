@@ -1,14 +1,15 @@
 package net.infinitygrid.mercury.command
 
+import me.lucko.commodore.file.CommodoreFileFormat
 import net.infinitygrid.mercury.Mercury
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 
-class CommandTest : MercuryCommand("test", Mercury.instance.getResource("test.commodore")) {
+class CommandTest : MercuryCommand("test", CommodoreFileFormat.parse(Mercury.instance.getResource("test.commodore"))) {
 
-    override fun executeCommand(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
+    override fun executeCommand(sender: CommandSender, commandLabel: String, args: Array<out String>): CommandResult {
         sender.sendMessage("ping!")
-        return true
+        return CommandResult.SUCCESS
     }
 
     override fun onTabComplete(
@@ -17,7 +18,7 @@ class CommandTest : MercuryCommand("test", Mercury.instance.getResource("test.co
         args: Array<out String>,
         location: Location?
     ): MutableList<String> {
-        TODO("Not yet implemented")
+        return mutableListOf()
     }
 
 }
