@@ -38,7 +38,14 @@ abstract class MercuryCommand(name: String, val commodoreFileInStream: InputStre
         args: Array<out String>,
         location: Location?
     ): MutableList<String> {
-        return super.tabComplete(sender, alias, args, location)
+        return onTabComplete(sender, alias, args, location)
     }
+
+    abstract fun onTabComplete(
+        sender: CommandSender,
+        alias: String,
+        args: Array<out String>,
+        location: Location? = null
+    ): MutableList<String>
 
 }
