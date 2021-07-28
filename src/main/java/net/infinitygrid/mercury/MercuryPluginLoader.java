@@ -2,7 +2,6 @@ package net.infinitygrid.mercury;
 
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
-import me.lucko.commodore.file.CommodoreFileFormat;
 import net.infinitygrid.mercury.command.MercuryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -11,8 +10,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +21,7 @@ public class MercuryPluginLoader extends JavaPlugin {
     private final CommandMap commandMap = Bukkit.getCommandMap();
     private final long initUnixTimeMs = System.currentTimeMillis();
     private final Set<MercuryComponent> componentSet = new HashSet<>();
-    private Commodore commodore;
+    public Commodore commodore;
 
     @Override
     public final void onLoad() {
@@ -41,7 +38,6 @@ public class MercuryPluginLoader extends JavaPlugin {
                 afterPluginEnable();
             }
         };
-        afterPluginEnable();
     }
 
     @Override
@@ -64,16 +60,7 @@ public class MercuryPluginLoader extends JavaPlugin {
         Arrays.stream(mercuryCommands).forEach(mercuryCommand -> {
             commandMap.register(mercuryCommand.getName(), mercuryCommand);
             if (CommodoreProvider.isSupported()) commodore = CommodoreProvider.getCommodore(this);
-            if (commodore != null) {
-                final InputStream commodoreFile = mercuryCommand.getCommodoreFileInStream();
-                if (commodoreFile != null) {
-                    try {
-                        commodore.register(mercuryCommand, CommodoreFileFormat.parse(commodoreFile));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            if (commodore != null) commodore.register(mercuryCommand, mercuryCommand.getCommandNode());
         });
     }
 
