@@ -1,22 +1,79 @@
 package net.infinitygrid.mercury.command
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException
+import com.mojang.brigadier.tree.LiteralCommandNode
+import net.infinitygrid.mercury.Mercury
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.Style
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
-import java.io.InputStream
 
-abstract class MercuryCommand(name: String, val commodoreFileInStream: InputStream? = null) : BukkitCommand(name) {
+abstract class MercuryCommand(name: String, val commandNode: LiteralCommandNode<MercuryCommand>? = null) : BukkitCommand(name) {
 
-    var requiresAnyPermission: MutableSet<String> = mutableSetOf()
-    val requiredPermissions: MutableSet<String> = mutableSetOf()
+    public var requiresAnyPermission: MutableSet<String> = mutableSetOf()
+    public var requiredPermissions: MutableSet<String> = mutableSetOf()
+    public var minArgsSize = 0
 
     final override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
-        if (requiresAnyPermission.size > 0) if (!hasAnyPermission(sender, requiresAnyPermission)) return true
-        if (requiredPermissions.size > 0) if (!hasEveryPermission(sender, requiredPermissions)) return true
-        return executeCommand(sender, commandLabel, args)
+        var commandResult: CommandResult? = null
+        var executeCommand = false
+
+        val syntaxException = thrownSyntaxException(sender, commandLabel, args)
+        syntaxException?.let {
+            sender.sendMessage(getSyntaxExceptionMessage(it))
+            commandResult = CommandResult.SYNTAX_EXCEPTION
+            return true
+        }
+
+        if (!isArgumentSizeValid(args)) commandResult = CommandResult.NOT_ENOUGH_ARGUMENTS
+        if (hasNoPermission(sender)) commandResult = CommandResult.NO_PERMISSION
+        if (hasInsufficientPermissions(sender)) commandResult = CommandResult.INSUFFICIENT_PERMISSIONS
+
+        if (commandResult == null) commandResult = executeCommand(sender, commandLabel, args)
+
+        return true
     }
 
-    abstract fun executeCommand(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean
+    private fun thrownSyntaxException(commandSender: CommandSender, commandLabel: String, args: Array<out String>): CommandSyntaxException? {
+        val command = commandToString(commandLabel, args)
+        val result = Mercury.instance.commodore.dispatcher.parse(command, this)
+        val optionalException = result.exceptions.entries.stream().findFirst()
+        if (optionalException.isPresent) return optionalException.get().value
+        return null
+    }
+
+    private fun getSyntaxExceptionMessage(exception: CommandSyntaxException): Component {
+        val contextWithoutPointer = exception.context.substring(0, exception.context.length - 9)
+        val input = exception.input
+        val errorUnderlined = input.replace(contextWithoutPointer, "").split(" ")[0]
+        return Component
+            .text("${exception.type}", TextColor.color(0xFF5555))
+            .append(Component.newline())
+            .append(Component.text(contextWithoutPointer, TextColor.color(0xAAAAAA)))
+            .append(Component.text(errorUnderlined, Style.style(TextDecoration.UNDERLINED)))
+            .append(Component.text("<--[HERE]", Style.style(TextDecoration.ITALIC)))
+    }
+
+    private fun commandToString(commandLabel: String, args: Array<out String>): String {
+        return "$commandLabel ${args.joinToString(" ")}"
+    }
+
+    private fun isArgumentSizeValid(args: Array<out String>): Boolean {
+        return args.size >= minArgsSize
+    }
+
+    private fun hasNoPermission(sender: CommandSender): Boolean {
+        return requiresAnyPermission.size > 0 && !hasAnyPermission(sender, requiresAnyPermission)
+    }
+
+    private fun hasInsufficientPermissions(sender: CommandSender): Boolean {
+        return requiredPermissions.size > 0 && !hasEveryPermission(sender, requiredPermissions)
+    }
+
+    abstract fun executeCommand(sender: CommandSender, commandLabel: String, args: Array<out String>): CommandResult
 
     private fun hasEveryPermission(commandSender: CommandSender, nodeList: Set<String>): Boolean {
         nodeList.forEach { permissionNode ->
