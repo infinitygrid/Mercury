@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -25,7 +24,7 @@ public class MercuryPluginLoader extends JavaPlugin {
     private final CommandMap commandMap = Bukkit.getCommandMap();
     private final long initUnixTimeMs = System.currentTimeMillis();
     private final Set<MercuryComponent> componentSet = new HashSet<>();
-    private Commodore commodore = null;
+    private Commodore commodore;
 
     @Override
     public final void onLoad() {
@@ -34,7 +33,6 @@ public class MercuryPluginLoader extends JavaPlugin {
 
     @Override
     public final void onEnable() {
-        if (CommodoreProvider.isSupported()) commodore = CommodoreProvider.getCommodore(this);
         onPluginEnable();
         getLogger().log(Level.INFO, "Plugin has been enabled! (Took " + (System.currentTimeMillis() - initUnixTimeMs) + "ms!)");
         new BukkitRunnable() {
@@ -65,6 +63,7 @@ public class MercuryPluginLoader extends JavaPlugin {
     public void registerCommand(MercuryCommand... mercuryCommands) {
         Arrays.stream(mercuryCommands).forEach(mercuryCommand -> {
             commandMap.register(mercuryCommand.getName(), mercuryCommand);
+            if (CommodoreProvider.isSupported()) commodore = CommodoreProvider.getCommodore(this);
             if (commodore != null) {
                 final InputStream commodoreFile = mercuryCommand.getCommodoreFileInStream();
                 if (commodoreFile != null) {
