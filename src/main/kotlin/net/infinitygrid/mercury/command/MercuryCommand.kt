@@ -21,7 +21,7 @@ abstract class MercuryCommand(name: String, val resourceFileName: String? = null
         var executeCommand = false
 
         if (resourceFileName != null) {
-            val syntaxException = thrownSyntaxException(sender, commandLabel, args)
+            val syntaxException = tryThrowSyntaxException(commandLabel, args)
             syntaxException?.let {
                 sender.sendMessage(getSyntaxExceptionMessage(it))
                 commandResult = CommandResult.SYNTAX_EXCEPTION
@@ -38,7 +38,7 @@ abstract class MercuryCommand(name: String, val resourceFileName: String? = null
         return true
     }
 
-    private fun thrownSyntaxException(commandSender: CommandSender, commandLabel: String, args: Array<out String>): CommandSyntaxException? {
+    private fun tryThrowSyntaxException(commandLabel: String, args: Array<out String>): CommandSyntaxException? {
         val command = commandToString(commandLabel, args)
         val result = Mercury.instance.commodore.dispatcher.parse(command, this)
         val optionalException = result.exceptions.entries.stream().findFirst()
