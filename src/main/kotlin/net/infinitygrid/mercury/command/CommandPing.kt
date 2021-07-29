@@ -2,11 +2,14 @@ package net.infinitygrid.mercury.command
 
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
-class CommandTest : MercuryCommand("test", "test.commodore") {
+class CommandPing : MercuryCommand("ping") {
 
     override fun executeCommand(data: CommandData): CommandResult {
-        data.sender.sendMessage("ping!")
+        if (data.sender !is Player) return CommandResult.INVALID_COMMAND_SENDER
+        val player: Player = data.sender
+        player.sendMessage("Your ping currently is ${player.ping}ms!")
         return CommandResult.SUCCESS
     }
 

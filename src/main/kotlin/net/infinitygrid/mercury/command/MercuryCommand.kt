@@ -33,7 +33,7 @@ abstract class MercuryCommand(name: String, val resourceFileName: String? = null
         if (hasNoPermission(sender)) commandResult = CommandResult.NO_PERMISSION
         if (hasInsufficientPermissions(sender)) commandResult = CommandResult.INSUFFICIENT_PERMISSIONS
 
-        if (commandResult == null) commandResult = executeCommand(sender, commandLabel, args)
+        if (commandResult == null) commandResult = executeCommand(CommandData(sender, label, args))
 
         return true
     }
@@ -74,7 +74,7 @@ abstract class MercuryCommand(name: String, val resourceFileName: String? = null
         return requiredPermissions.size > 0 && !hasEveryPermission(sender, requiredPermissions)
     }
 
-    abstract fun executeCommand(sender: CommandSender, commandLabel: String, args: Array<out String>): CommandResult
+    abstract fun executeCommand(data: CommandData): CommandResult
 
     private fun hasEveryPermission(commandSender: CommandSender, nodeList: Set<String>): Boolean {
         nodeList.forEach { permissionNode ->
