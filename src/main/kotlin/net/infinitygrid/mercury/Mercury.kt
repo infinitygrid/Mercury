@@ -2,6 +2,8 @@ package net.infinitygrid.mercury
 
 import net.infinitygrid.mercury.chat.AsyncChatEvent
 import net.infinitygrid.mercury.chat.ConnectionListener
+import net.infinitygrid.mercury.command.CommandPing
+import net.infinitygrid.mercury.command.CommandTest
 import net.infinitygrid.mercury.config.GsonConfigManager
 import net.infinitygrid.mercury.discord.DiscordLivechatComponent
 import net.infinitygrid.mercury.pojo.GsonDiscordLivechat
@@ -31,6 +33,7 @@ internal class Mercury : MercuryPluginLoader() {
         }
         prefixScoreboard = PrefixScoreboard(permissionGroupConfig)
         registerListener(AsyncChatEvent(), ConnectionListener())
+        registerCommand(CommandTest(), CommandPing())
     }
 
     override fun onPluginDisable() {

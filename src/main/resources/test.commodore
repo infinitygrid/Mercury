@@ -1,0 +1,7 @@
+test {
+    hellooo brigadier:integer;
+    this;
+    is;
+    a;
+    test;
+}
