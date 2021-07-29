@@ -1,7 +1,6 @@
 package net.infinitygrid.mercury.command
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException
-import com.mojang.brigadier.tree.LiteralCommandNode
 import net.infinitygrid.mercury.Mercury
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.Style
@@ -11,7 +10,7 @@ import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
 
-abstract class MercuryCommand(name: String, val commandNode: LiteralCommandNode<MercuryCommand>? = null) : BukkitCommand(name) {
+abstract class MercuryCommand(name: String, val resourceFileName: String? = null) : BukkitCommand(name) {
 
     public var requiresAnyPermission: MutableSet<String> = mutableSetOf()
     public var requiredPermissions: MutableSet<String> = mutableSetOf()
@@ -21,11 +20,13 @@ abstract class MercuryCommand(name: String, val commandNode: LiteralCommandNode<
         var commandResult: CommandResult? = null
         var executeCommand = false
 
-        val syntaxException = thrownSyntaxException(sender, commandLabel, args)
-        syntaxException?.let {
-            sender.sendMessage(getSyntaxExceptionMessage(it))
-            commandResult = CommandResult.SYNTAX_EXCEPTION
-            return true
+        if (resourceFileName != null) {
+            val syntaxException = thrownSyntaxException(sender, commandLabel, args)
+            syntaxException?.let {
+                sender.sendMessage(getSyntaxExceptionMessage(it))
+                commandResult = CommandResult.SYNTAX_EXCEPTION
+                return true
+            }
         }
 
         if (!isArgumentSizeValid(args)) commandResult = CommandResult.NOT_ENOUGH_ARGUMENTS

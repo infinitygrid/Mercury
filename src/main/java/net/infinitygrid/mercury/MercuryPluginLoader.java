@@ -2,6 +2,7 @@ package net.infinitygrid.mercury;
 
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
+import me.lucko.commodore.file.CommodoreFileFormat;
 import net.infinitygrid.mercury.command.MercuryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -10,6 +11,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +62,14 @@ public class MercuryPluginLoader extends JavaPlugin {
         Arrays.stream(mercuryCommands).forEach(mercuryCommand -> {
             commandMap.register(mercuryCommand.getName(), mercuryCommand);
             if (CommodoreProvider.isSupported()) commodore = CommodoreProvider.getCommodore(this);
-            if (commodore != null) commodore.register(mercuryCommand, mercuryCommand.getCommandNode());
+            String resourceFile = mercuryCommand.getResourceFileName();
+            if (resourceFile != null && commodore != null) {
+                try {
+                    commodore.register(mercuryCommand, CommodoreFileFormat.parse(this.getResource(resourceFile)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 
