@@ -39,7 +39,7 @@ abstract class MercuryCommand(name: String, val resourceFileName: String? = null
 
     private fun tryThrowSyntaxException(commandLabel: String, args: Array<out String>): CommandSyntaxException? {
         val command = commandToString(commandLabel, args)
-        val result = Mercury.instance.commodore.dispatcher.parse(command, this)
+        val result = Mercury.instance.commodore!!.dispatcher.parse(command, this)
         val optionalException = result.exceptions.entries.stream().findFirst()
         if (optionalException.isPresent) return optionalException.get().value
         return null
