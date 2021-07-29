@@ -12,13 +12,12 @@ import org.bukkit.command.defaults.BukkitCommand
 
 abstract class MercuryCommand(name: String, val resourceFileName: String? = null) : BukkitCommand(name) {
 
-    public var requiresAnyPermission: MutableSet<String> = mutableSetOf()
-    public var requiredPermissions: MutableSet<String> = mutableSetOf()
-    public var minArgsSize = 0
+    var requiresAnyPermission: MutableSet<String> = mutableSetOf()
+    var requiredPermissions: MutableSet<String> = mutableSetOf()
+    var minArgsSize = 0
 
     final override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
         var commandResult: CommandResult? = null
-        var executeCommand = false
 
         if (resourceFileName != null) {
             val syntaxException = tryThrowSyntaxException(commandLabel, args)
